@@ -2,7 +2,7 @@ from google.oauth2 import service_account
 import os
 
 current_directory = os.getcwd()
-SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
+SCOPES = ['https://www.googleapis.com/auth/drive.readonly', 'https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive.metadata.readonly']
 SERVICE_ACCOUNT_FILE = f'{current_directory}/resources/ovo-gdrive-277815-1df7fd0a4f85.json'
 
 
