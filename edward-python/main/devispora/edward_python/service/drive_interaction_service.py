@@ -1,6 +1,7 @@
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
+from devispora.edward_python.exceptions.drive_exceptions import DriveException, DriveExceptionMessage
 from devispora.edward_python.google.credentials import get_credentials
 
 credentials = get_credentials()
@@ -21,10 +22,8 @@ def retrieve_items_from_folder(folder_id: str):
             request = file_operation.list_next(request, results)
             items.extend(drive_files)
         if not items:
-            # todo throw error that edward can't find anything in the current folder.
-            #  This should never happen right now as there's always at least the template
-            print('No files found.')
-            return
+            raise DriveException(DriveExceptionMessage.NoFilesFound)
         return items
     except HttpError as error:
         print(f'An error occurred: {error}')
+        raise DriveException(DriveExceptionMessage.HTTPError)

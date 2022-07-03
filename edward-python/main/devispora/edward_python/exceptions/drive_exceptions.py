@@ -12,3 +12,4 @@ class DriveException(Exception):
 
 class DriveExceptionMessage(str, Enum):
     NoFilesFound = 'Not a single file could be accessed at the assigned folder'
+    HTTPError = 'Encountered an error trying to communicate with Google Drive, check the logs for more info'
