@@ -2,7 +2,7 @@ import unittest
 
 from devispora.edward_python.exceptions.account_sheet_exceptions import AccountSheetException, \
     AccountSheetExceptionMessage
-from devispora.edward_python.models.helpers.date_helper import parse_google_string_to_date
+from devispora.edward_python.models.helpers.date_helper import parse_google_string_to_date, sheet_is_from_this_year
 
 
 class DateHelperTest(unittest.TestCase):
@@ -22,6 +22,16 @@ class DateHelperTest(unittest.TestCase):
         input_time = '00:00'
         self.assertRaisesRegex(AccountSheetException, AccountSheetExceptionMessage.RequestDateTimeNotISOFormat,
                                parse_google_string_to_date, non_iso_input_date, input_time)
+
+    def test_sheet_is_from_this_year_true(self):
+        sheet_name = '2022-05-28 [Name]'
+        result = sheet_is_from_this_year(sheet_name)
+        self.assertTrue(result)
+
+    def test_sheet_is_from_this_year_false(self):
+        sheet_name = '!2022-05-28 [Name]'
+        result = sheet_is_from_this_year(sheet_name)
+        self.assertFalse(result)
 
 
 if __name__ == '__main__':
