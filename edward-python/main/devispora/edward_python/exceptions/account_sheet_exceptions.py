@@ -15,3 +15,4 @@ class AccountSheetExceptionMessage(str, Enum):
     EmailCouldNotBeParsed = 'Encountered an issue trying to parse the email section'
     RequestDateNotFound = 'No date could be found where it was expected'
     RequestDateCouldNotBeParsed = 'Encountered an issue trying to parse the String at request date into a date object'
+    RequestDateTimeNotISOFormat = 'The requested datetime was not in the ISO format of YYYY-MM-DD and 00:00'

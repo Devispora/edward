@@ -15,3 +15,7 @@ class GoogleItemHelperTest(unittest.TestCase):
         self.assertEqual(2, len(result))
         self.assertEqual(result[0][GoogleMimeTypes.MimeType], GoogleMimeTypes.Sheet)
         self.assertEqual(result[1][GoogleMimeTypes.MimeType], GoogleMimeTypes.Sheet)
+
+
+if __name__ == '__main__':
+    unittest.main()
