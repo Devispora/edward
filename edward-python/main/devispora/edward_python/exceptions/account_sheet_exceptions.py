@@ -16,3 +16,6 @@ class AccountSheetExceptionMessage(str, Enum):
     RequestDateNotFound = 'No date could be found where it was expected'
     RequestDateCouldNotBeParsed = 'Encountered an issue trying to parse the String at request date into a date object'
     RequestDateTimeNotISOFormat = 'The requested datetime was not in the ISO format of YYYY-MM-DD and 00:00'
+    SharedStatusIssue = 'Encountered an issue trying to retrieve the shared status'
+    ReservationTypeIssue = 'The reservation type could not be retrieved'
+    ReservationTypeNotRecognised = 'The reservation type did not match the expected obs/account variants'

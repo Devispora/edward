@@ -2,7 +2,7 @@ from typing import List
 
 from devispora.edward_python.exceptions.account_sheet_exceptions import AccountSheetExceptionMessage, \
     AccountSheetException
-from devispora.edward_python.models.account_sheet import AccountSheetResult
+from devispora.edward_python.models.account_sheet import AccountSheetResult, AccountSheetConstants
 from devispora.edward_python.models.helpers.date_helper import parse_google_string_to_date
 
 
@@ -28,3 +28,23 @@ def retrieve_date(sheet_values: List):
         raise AccountSheetException(AccountSheetExceptionMessage.RequestDateNotFound)
     except ValueError:
         raise AccountSheetException(AccountSheetExceptionMessage.RequestDateCouldNotBeParsed)
+
+
+def retrieve_shared_status(sheet_values: List):
+    try:
+        return sheet_values[3][0]
+    except IndexError:
+        raise AccountSheetException(AccountSheetExceptionMessage.SharedStatusIssue)
+
+
+def retrieve_reservation_type(sheet_values: List):
+    try:
+        res_type_input = sheet_values[4][0]
+        if res_type_input == AccountSheetConstants.NormalAccountsType:
+            return AccountSheetConstants.NormalAccountsType
+        elif res_type_input == AccountSheetConstants.ObserverAccountsType:
+            return AccountSheetConstants.ObserverAccountsType
+        else:
+            raise AccountSheetException(AccountSheetExceptionMessage.ReservationTypeNotRecognised)
+    except IndexError:
+        raise AccountSheetException(AccountSheetExceptionMessage.ReservationTypeIssue)
