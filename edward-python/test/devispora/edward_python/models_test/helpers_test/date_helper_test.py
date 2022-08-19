@@ -1,8 +1,10 @@
+import datetime
 import unittest
 
 from devispora.edward_python.exceptions.account_sheet_exceptions import AccountSheetException, \
     AccountSheetExceptionMessage
-from devispora.edward_python.models.helpers.date_helper import parse_google_string_to_date, sheet_is_from_this_year
+from devispora.edward_python.models.helpers.date_helper import parse_google_string_to_date, sheet_is_from_this_year, \
+    five_minute_creation_cooldown
 
 
 class DateHelperTest(unittest.TestCase):
@@ -32,6 +34,11 @@ class DateHelperTest(unittest.TestCase):
         sheet_name = '!2022-05-28 [Name]'
         result = sheet_is_from_this_year(sheet_name)
         self.assertFalse(result)
+
+    def test_five_minute_creation_cooldown(self):
+        sheet_creation_time = '2022-07-09T00:07:18.953Z'
+        result = five_minute_creation_cooldown(sheet_creation_time)
+        self.assertTrue(result)
 
 
 if __name__ == '__main__':

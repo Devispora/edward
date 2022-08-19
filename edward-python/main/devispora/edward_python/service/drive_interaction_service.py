@@ -14,7 +14,7 @@ def retrieve_items_from_folder(folder_id: str):
     request = file_operation.list(
         q=f'"{folder_id}" in parents',
         pageSize=10,
-        fields="nextPageToken, files(id, name, mimeType)")
+        fields="nextPageToken, files(id, name, mimeType, createdTime)")
     try:
         while request is not None:
             results = request.execute()

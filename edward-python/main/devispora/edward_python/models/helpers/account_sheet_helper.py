@@ -2,15 +2,15 @@ from typing import List
 
 from devispora.edward_python.exceptions.account_sheet_exceptions import AccountSheetExceptionMessage, \
     AccountSheetException
-from devispora.edward_python.models.account_sheet import AccountSheetResult, AccountSheetConstants
+from devispora.edward_python.models.account_sheet import AccountSheetResult, AccountSheetStatus, AccountSheetType
 from devispora.edward_python.models.helpers.date_helper import parse_google_string_to_date
 
 
 def process_account_sheet(sheet_values: List) -> AccountSheetResult:
     emails = retrieve_emails(sheet_values)
     request_datetime = retrieve_date(sheet_values)
-    shared_status = sheet_values[3][0]
-    reservation_type = sheet_values[4][0]
+    shared_status = retrieve_shared_status(sheet_values)
+    reservation_type = retrieve_reservation_type(sheet_values)
     return AccountSheetResult(emails, request_datetime, shared_status, reservation_type)
 
 
@@ -32,7 +32,13 @@ def retrieve_date(sheet_values: List):
 
 def retrieve_shared_status(sheet_values: List):
     try:
-        return sheet_values[3][0]
+        shared_status = sheet_values[3][0]
+        if shared_status == AccountSheetStatus.StatusNotReady:
+            raise AccountSheetException(AccountSheetExceptionMessage.SharedStatusIsNotCleared)
+        elif shared_status == AccountSheetStatus.StatusReadyToShare:
+            return AccountSheetStatus.StatusReadyToShare
+        elif shared_status == AccountSheetStatus.StatusShared:
+            return AccountSheetStatus.StatusShared
     except IndexError:
         raise AccountSheetException(AccountSheetExceptionMessage.SharedStatusIssue)
 
@@ -40,10 +46,10 @@ def retrieve_shared_status(sheet_values: List):
 def retrieve_reservation_type(sheet_values: List):
     try:
         res_type_input = sheet_values[4][0]
-        if res_type_input == AccountSheetConstants.NormalAccountsType:
-            return AccountSheetConstants.NormalAccountsType
-        elif res_type_input == AccountSheetConstants.ObserverAccountsType:
-            return AccountSheetConstants.ObserverAccountsType
+        if res_type_input == AccountSheetType.NormalAccountsType:
+            return AccountSheetType.NormalAccountsType
+        elif res_type_input == AccountSheetType.ObserverAccountsType:
+            return AccountSheetType.ObserverAccountsType
         else:
             raise AccountSheetException(AccountSheetExceptionMessage.ReservationTypeNotRecognised)
     except IndexError:
