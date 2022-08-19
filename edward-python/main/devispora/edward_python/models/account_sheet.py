@@ -23,7 +23,3 @@ class AccountSheetResult:
         self.request_datetime = request_datetime
         self.shared_status = shared_status
         self.reservation_type = reservation_type
-
-
-
-
