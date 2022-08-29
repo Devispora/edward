@@ -33,14 +33,10 @@ def retrieve_date(sheet_values: List):
 def retrieve_shared_status(sheet_values: List):
     try:
         shared_status = sheet_values[3][0]
-        if shared_status == AccountSheetStatus.StatusNotReady:
-            raise AccountSheetException(AccountSheetExceptionMessage.SharedStatusIsNotCleared)
-        elif shared_status == AccountSheetStatus.StatusReadyToShare:
-            return AccountSheetStatus.StatusReadyToShare
-        elif shared_status == AccountSheetStatus.StatusShared:
-            return AccountSheetStatus.StatusShared
-        elif shared_status == AccountSheetStatus.StatusCancelled:
-            return AccountSheetStatus.StatusCancelled
+        try:
+            return AccountSheetStatus(shared_status)
+        except ValueError:
+            raise AccountSheetException(AccountSheetExceptionMessage.SharedStatusNotRecognised)
     except IndexError:
         raise AccountSheetException(AccountSheetExceptionMessage.SharedStatusIssue)
 

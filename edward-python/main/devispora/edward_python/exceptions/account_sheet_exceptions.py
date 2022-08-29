@@ -18,6 +18,7 @@ class AccountSheetExceptionMessage(str, Enum):
     RequestDateTimeNotISOFormat = 'The requested datetime was not in the ISO format of YYYY-MM-DD and 00:00'
     GoogleMightHaveChangedDateFormat = 'The created sheet date format changed from what was expected.'
     SharedStatusIssue = 'Encountered an issue trying to retrieve the shared status'
+    SharedStatusNotRecognised = 'Encountered a shared status that the system does not recognise'
     SharedStatusIsNotCleared = 'The sheet status of this sheet has not been correctly updated since its creation'
     ReservationTypeIssue = 'The reservation type could not be retrieved'
     ReservationTypeNotRecognised = 'The reservation type did not match the expected obs/account variants'

@@ -28,19 +28,12 @@ def retrieve_discord_id(contact: List[str]):
         raise RepSheetException(RepSheetExceptionMessage.DiscordIdNotInt)
 
 
-# todo check if there's a better way to iterate through a python enum
 def retrieve_rep_type(contact: List[str]) -> RepType:
     rep_type = contact[5]
-    if rep_type == RepType.OutfitRep:
-        return RepType.OutfitRep
-    elif rep_type == RepType.CommunityRep:
-        return RepType.CommunityRep
-    elif rep_type == RepType.ObserverUser:
-        return RepType.ObserverUser
-    elif rep_type == RepType.ScrimTeam:
-        return RepType.ScrimTeam
-    else:
-        raise RepSheetException(RepSheetExceptionMessage.RepTypeNotRecognised)
+    try:
+        return RepType(rep_type)
+    except KeyError:
+        raise RepSheetException(RepSheetExceptionMessage.RepTypeNotRecognised, rep_type)
 
 
 # todo think about merging this if we're not expanding it later
