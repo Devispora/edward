@@ -1,6 +1,7 @@
 from typing import List
 
 from devispora.edward_python.exceptions.rep_sheet_exceptions import RepSheetException, RepSheetExceptionMessage
+from devispora.edward_python.models.account_sheet import AccountSheetResult
 from devispora.edward_python.models.contact_sheet import Contact, RepType
 
 
@@ -45,11 +46,14 @@ def retrieve_account_limit(contact: List[str]):
 
 
 # todo consider how we can allow
-def find_reps_on_sheet(contacts: [Contact], sheet_emails: [str]) -> [Contact]:
+def find_reps_on_sheet(contacts: [Contact], sheet: AccountSheetResult) -> [Contact]:
     retrieved_reps = []
-    for sheet_email in sheet_emails:
+    for sheet_email in sheet.emails:
         for contact in contacts:
             if contact.email == sheet_email:
                 retrieved_reps.append(contact)
     return retrieved_reps
 
+
+def fetch_emails_only(contacts: [Contact]):
+    return [contact.email for contact in contacts]

@@ -31,7 +31,7 @@ def retrieve_items_from_folder(folder_id: str):
 
 
 # todo catch them exceptions
-def share_sheet_to_user(spreadsheet_id: str, emails: [str]):
+def share_sheet_to_users(spreadsheet_id: str, emails: [str]):
     prepared_batch = drive_service.new_batch_http_request(callback=callback)
     for email in emails:
         permission = drive_service.permissions().create(

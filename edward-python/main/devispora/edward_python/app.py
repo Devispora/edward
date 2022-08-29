@@ -1,7 +1,7 @@
 import json
 
-from devispora.edward_python.models.helpers.contact_sheet_helper import find_reps_on_sheet
-from devispora.edward_python.service.drive_interaction_service import retrieve_items_from_folder, share_sheet_to_user
+from devispora.edward_python.models.helpers.contact_sheet_helper import find_reps_on_sheet, fetch_emails_only
+from devispora.edward_python.service.drive_interaction_service import retrieve_items_from_folder, share_sheet_to_users
 from devispora.edward_python.service.helpers.google_item_helper import filter_to_just_files, \
     filter_by_name_and_cooldown, filter_by_share_and_cleaning
 from devispora.edward_python.service.rep_interaction_service import retrieve_contacts
@@ -25,11 +25,12 @@ def lambda_handler(event, context):
     for sheet in sheets_to_share:
         # todo nope lol this needs to be verified first
         #  verify sheet emails. Only send to ones that properly exist
-        #  - method that filters out emails that exist and discord id can be found of
-        #  - share to sheet, easy
+        #  - [done] grab emails from contacts to verify
+        #  - [done] share to sheet, easy
         #  - share to discord [all users at once for that sheet]
-        approved_emails = find_reps_on_sheet(contact_reps, sheets_to_share)
-        share_sheet_to_user(sheet.sheet_id, approved_emails)
+        approved_contacts = find_reps_on_sheet(contact_reps, sheet)
+        share_to_emails = fetch_emails_only(approved_contacts)
+        share_sheet_to_users(sheet.sheet_id, share_to_emails)
 
 
     # todo
