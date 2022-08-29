@@ -1,29 +1,44 @@
 import json
 
-from devispora.edward_python.service.drive_interaction_service import retrieve_items_from_folder
+from devispora.edward_python.models.helpers.contact_sheet_helper import find_reps_on_sheet
+from devispora.edward_python.service.drive_interaction_service import retrieve_items_from_folder, share_sheet_to_user
 from devispora.edward_python.service.helpers.google_item_helper import filter_to_just_files, \
     filter_by_name_and_cooldown, filter_by_share_and_cleaning
+from devispora.edward_python.service.rep_interaction_service import retrieve_contacts
 from devispora.edward_python.service.sheets_interaction_service import retrieve_sheet_information
 
 just_this_folder = '1RV9MSTKvS2IlGbYFVWFBMtoiUErxxsIl'
+contact_sheet_test = '1eY0kR6QOYpC7Al9zthMm4I2E4BybwD2crupdgLlerSs'
 
 
 def lambda_handler(event, context):
     # non aws-devs: event/context are mandatory even if not used
     drive_items = retrieve_items_from_folder(just_this_folder)
     filtered_files = filter_to_just_files(drive_items)
+
     filtered_sheets = filter_by_name_and_cooldown(filtered_files)
 
     converted_sheets, erred_sheets = retrieve_sheet_information(filtered_sheets)
-
     sheets_to_share, sheets_to_clean = filter_by_share_and_cleaning(converted_sheets)
+
+    contact_reps = retrieve_contacts(contact_sheet_test)
+    for sheet in sheets_to_share:
+        # todo nope lol this needs to be verified first
+        #  verify sheet emails. Only send to ones that properly exist
+        #  - method that filters out emails that exist and discord id can be found of
+        #  - share to sheet, easy
+        #  - share to discord [all users at once for that sheet]
+        approved_emails = find_reps_on_sheet(contact_reps, sheets_to_share)
+        share_sheet_to_user(sheet.sheet_id, approved_emails)
+
 
     # todo
     #   [done] Split all the sheets that need to be shared
     #   [done] Split all the sheets that can be cleaned after 2 days
     #  Share mechanism ->
-    #   - Read out contact sheet info [one super sheet now]
-    #   - share sheet to emails
+    #   - [done] Read out contact sheet info [one super sheet now]
+    #   - fetch contact(s) from sheet and match with contact
+    #   - [done] share sheet to emails
     #   - change status to shared
     #   - inform users on discord with link/name
     #  Clean/error mechanism ->
@@ -34,6 +49,7 @@ def lambda_handler(event, context):
 
     # sheets_to_share = filter_sheets_that_need_shared()
     # todo filter sheets from here
+    print('tek')
 
     return {
         "statusCode": 200,

@@ -34,3 +34,11 @@ def filter_by_share_and_cleaning(sheets: [AccountSheetResult]):
 
 def shared_status_valid(status: AccountSheetStatus):
     return status == AccountSheetStatus.StatusReadyToShare
+
+
+def create_email_permission(email: str):
+    return {
+        'type': 'user',
+        'role': 'writer',
+        'emailAddress': email
+    }

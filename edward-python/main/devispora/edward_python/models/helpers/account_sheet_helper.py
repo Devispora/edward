@@ -6,12 +6,12 @@ from devispora.edward_python.models.account_sheet import AccountSheetResult, Acc
 from devispora.edward_python.models.helpers.date_helper import parse_google_string_to_date
 
 
-def process_account_sheet(sheet_values: List) -> AccountSheetResult:
+def process_account_sheet(sheet_values: List, sheet_id: str) -> AccountSheetResult:
     emails = retrieve_emails(sheet_values)
     request_datetime = retrieve_date(sheet_values)
     shared_status = retrieve_shared_status(sheet_values)
     reservation_type = retrieve_reservation_type(sheet_values)
-    return AccountSheetResult(emails, request_datetime, shared_status, reservation_type)
+    return AccountSheetResult(sheet_id, emails, request_datetime, shared_status, reservation_type)
 
 
 def retrieve_emails(sheet_values: List):
@@ -39,6 +39,8 @@ def retrieve_shared_status(sheet_values: List):
             return AccountSheetStatus.StatusReadyToShare
         elif shared_status == AccountSheetStatus.StatusShared:
             return AccountSheetStatus.StatusShared
+        elif shared_status == AccountSheetStatus.StatusCancelled:
+            return AccountSheetStatus.StatusCancelled
     except IndexError:
         raise AccountSheetException(AccountSheetExceptionMessage.SharedStatusIssue)
 

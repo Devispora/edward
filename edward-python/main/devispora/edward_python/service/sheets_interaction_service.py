@@ -13,12 +13,19 @@ def retrieve_sheet_information(drive_files: []) -> []:
     converted_sheets = []
     erred_sheets = []
     for item in drive_files:
-        result = sheets_service.spreadsheets().values().batchGet(
-            spreadsheetId=item['id'], ranges=desired_account_sheet_range).execute()
-        ranges = result['valueRanges'][0]['values']
+        sheet_id = item['id']
+        ranges = retrieve_sheet_values_by_range(spreadsheet_id=sheet_id, desired_ranges=desired_account_sheet_range)
         try:
-            converted_sheet = process_account_sheet(ranges)
+            converted_sheet = process_account_sheet(ranges, sheet_id)
             converted_sheets.append(converted_sheet)
         except AccountSheetException as warning:
             erred_sheets.append((item, warning))
     return converted_sheets, erred_sheets
+
+
+def retrieve_sheet_values_by_range(spreadsheet_id: str, desired_ranges: []):
+    """ Can be used to retrieve sheet values of an already retrieved Google Drive item """
+    result = sheets_service.spreadsheets().values().batchGet(
+        spreadsheetId=spreadsheet_id, ranges=desired_ranges).execute()
+    return result['valueRanges'][0]['values']
+
