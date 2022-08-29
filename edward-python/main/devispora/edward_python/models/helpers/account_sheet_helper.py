@@ -1,9 +1,12 @@
+import re
 from typing import List
 
 from devispora.edward_python.exceptions.account_sheet_exceptions import AccountSheetExceptionMessage, \
     AccountSheetException
 from devispora.edward_python.models.account_sheet import AccountSheetResult, AccountSheetStatus, AccountSheetType
 from devispora.edward_python.models.helpers.date_helper import parse_google_string_to_date
+
+allowed_delimiters = '[:;, ]'
 
 
 def process_account_sheet(sheet_values: List, sheet_id: str) -> AccountSheetResult:
@@ -16,7 +19,9 @@ def process_account_sheet(sheet_values: List, sheet_id: str) -> AccountSheetResu
 
 def retrieve_emails(sheet_values: List):
     try:
-        return sheet_values[0][0]
+        emails = sheet_values[0][0]
+        resulting_emails = re.split(allowed_delimiters, emails)
+        return resulting_emails
     except IndexError:
         raise AccountSheetException(AccountSheetExceptionMessage.EmailNotFound)
 
