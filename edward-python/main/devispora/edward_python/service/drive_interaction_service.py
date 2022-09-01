@@ -2,6 +2,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 from devispora.edward_python.exceptions.drive_exceptions import DriveException, DriveExceptionMessage
+from devispora.edward_python.exceptions.sheet_share_exception import SheetShareException, SheetShareExceptionMessage
 from devispora.edward_python.google.credentials import get_credentials
 from devispora.edward_python.service.helpers.google_item_helper import create_email_permission
 
@@ -45,8 +46,5 @@ def share_sheet_to_users(spreadsheet_id: str, emails: [str]):
 
 def callback(request_id, response, exception):
     if exception:
-        # Handle error
         print(exception)
-    else:
-        print(f'Request_Id: {request_id}')
-        print(F'Permission Id: {response.get("id")}')
+        raise SheetShareException(SheetShareExceptionMessage.ShareIssue)

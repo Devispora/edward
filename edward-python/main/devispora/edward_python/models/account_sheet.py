@@ -13,15 +13,20 @@ class AccountSheetStatus(str, Enum):
     StatusCancelled = 'Cancelled'
     StatusNotReady = 'Not Ready'
     StatusReadyToShare = 'Ready to Share'
+    StatusManuallyShared = 'Manually Shared'
     StatusShared = 'Shared'
+
+    def __repr__(self):
+        return self.value
 
 
 class AccountSheetResult:
 
-    def __init__(self, sheet_id: str, emails: [str], request_datetime: datetime,
+    def __init__(self, sheet_id: str, sheet_name: str, emails: [str], request_datetime: datetime,
                  shared_status: AccountSheetStatus, reservation_type: AccountSheetType):
         self.sheet_id = sheet_id
-        self.emails = [emails]
+        self.sheet_name = sheet_name
+        self.emails = emails
         self.request_datetime = request_datetime
         self.shared_status = shared_status
         self.reservation_type = reservation_type

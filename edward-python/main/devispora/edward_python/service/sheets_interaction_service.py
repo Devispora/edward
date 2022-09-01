@@ -14,9 +14,10 @@ def retrieve_sheet_information(drive_files: []) -> []:
     erred_sheets = []
     for item in drive_files:
         sheet_id = item['id']
+        sheet_name = item['name']
         ranges = retrieve_sheet_values_by_range(spreadsheet_id=sheet_id, desired_ranges=desired_account_sheet_range)
         try:
-            converted_sheet = process_account_sheet(ranges, sheet_id)
+            converted_sheet = process_account_sheet(ranges, sheet_id, sheet_name)
             converted_sheets.append(converted_sheet)
         except AccountSheetException as warning:
             erred_sheets.append((item, warning))
@@ -28,4 +29,16 @@ def retrieve_sheet_values_by_range(spreadsheet_id: str, desired_ranges: []):
     result = sheets_service.spreadsheets().values().batchGet(
         spreadsheetId=spreadsheet_id, ranges=desired_ranges).execute()
     return result['valueRanges'][0]['values']
+
+
+def update_shared_status(spreadsheet_id: str, cell_range: [str], updated_status: str):
+    sheets_service.spreadsheets().values().update(
+        spreadsheetId=spreadsheet_id,
+        range=cell_range,
+        body={
+            'values': [[updated_status]]
+        },
+        valueInputOption='RAW'
+    ).execute()
+
 

@@ -5,11 +5,14 @@ from devispora.edward_python.models.account_sheet import AccountSheetResult
 from devispora.edward_python.models.contact_sheet import Contact, RepType
 
 
+expected_contact_columns = 9
+
+
 def process_rep_sheet(contact_sheet_items: List[List[str]]) -> [Contact]:
     # Converts contact sheet into Contacts. Starting from list position 1 as 0 is titles
     resulting_reps: [Contact] = []
     for contact in contact_sheet_items[1:]:
-        if len(contact) >= 9:
+        if len(contact) >= expected_contact_columns:
             resulting_reps.append(Contact(
                 groups=contact[0],
                 char_name=contact[1],
@@ -57,3 +60,7 @@ def find_reps_on_sheet(contacts: [Contact], sheet: AccountSheetResult) -> [Conta
 
 def fetch_emails_only(contacts: [Contact]):
     return [contact.email for contact in contacts]
+
+
+def fetch_discord_ids(contacts: [Contact]):
+    return [contact.discord_id for contact in contacts]

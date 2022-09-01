@@ -9,12 +9,12 @@ from devispora.edward_python.models.helpers.date_helper import parse_google_stri
 allowed_delimiters = '[:;, ]'
 
 
-def process_account_sheet(sheet_values: List, sheet_id: str) -> AccountSheetResult:
+def process_account_sheet(sheet_values: List, sheet_id: str, sheet_name: str) -> AccountSheetResult:
     emails = retrieve_emails(sheet_values)
     request_datetime = retrieve_date(sheet_values)
     shared_status = retrieve_shared_status(sheet_values)
     reservation_type = retrieve_reservation_type(sheet_values)
-    return AccountSheetResult(sheet_id, emails, request_datetime, shared_status, reservation_type)
+    return AccountSheetResult(sheet_id, sheet_name, emails, request_datetime, shared_status, reservation_type)
 
 
 def retrieve_emails(sheet_values: List):
