@@ -12,22 +12,22 @@ def filter_to_just_files(items: [dict]):
     return filtered_items
 
 
-def filter_by_name_and_cooldown(items: [dict]):
+def filter_by_name_and_cooldown(items: [dict], current_date_utc):
     filtered_items = []
     for item in items:
-        if sheet_is_from_this_year(item['name']):
-            if five_minute_creation_cooldown(item['createdTime']):
+        if sheet_is_from_this_year(item['name'], current_date_utc):
+            if five_minute_creation_cooldown(item['createdTime'], current_date_utc):
                 filtered_items.append(item)
     return filtered_items
 
 
-def filter_by_share_and_cleaning(sheets: [AccountSheetResult]):
+def filter_by_share_and_cleaning(sheets: [AccountSheetResult], current_date_utc):
     sheets_to_clean = []
     sheets_to_share = []
     for sheet in sheets:
-        if has_been_two_days(sheet.request_datetime):
+        if has_been_two_days(sheet.request_datetime, current_date_utc):
             sheets_to_clean.append(sheet)
-        elif is_due_to_release(sheet.request_datetime) and shared_status_valid(sheet.shared_status):
+        elif is_due_to_release(sheet.request_datetime, current_date_utc) and shared_status_valid(sheet.shared_status):
             sheets_to_share.append(sheet)
     return sheets_to_share, sheets_to_clean
 

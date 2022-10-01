@@ -41,5 +41,3 @@ def update_shared_status(spreadsheet_id: str, cell_range: [str], updated_status:
         },
         valueInputOption='RAW'
     ).execute()
-
-
