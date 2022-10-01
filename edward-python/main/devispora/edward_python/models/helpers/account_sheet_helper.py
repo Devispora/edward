@@ -21,7 +21,14 @@ def retrieve_emails(sheet_values: List):
     try:
         emails = sheet_values[0][0]
         resulting_emails = re.split(allowed_delimiters, emails)
-        return resulting_emails
+        cleaned_emails = []
+        # todo later add more sophisticated parsing
+        for email in resulting_emails:
+            if email == '':
+                pass
+            else:
+                cleaned_emails.append(email)
+        return cleaned_emails
     except IndexError:
         raise AccountSheetException(AccountSheetExceptionMessage.EmailNotFound)
 

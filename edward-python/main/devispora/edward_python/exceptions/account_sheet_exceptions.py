@@ -12,6 +12,8 @@ class AccountSheetException(Exception):
 
 class AccountSheetExceptionMessage(str, Enum):
     EmailNotFound = 'No email has been supplied'
+    EmailNeverMatched = 'A supplied email could not be found in the rep sheet, could not share this sheet at all'
+    EmailNotFoundInRepSheet = 'One of the emails could not be found in the rep sheet, but shared to the rest anyway'
     EmailCouldNotBeParsed = 'Encountered an issue trying to parse the email section'
     RequestDateNotFound = 'No date could be found where it was expected'
     RequestDateCouldNotBeParsed = 'Encountered an issue trying to parse the String at request date into a date object'

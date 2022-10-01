@@ -20,12 +20,17 @@ class AccountSheetStatus(str, Enum):
         return self.value
 
 
-class AccountSheetResult:
+class SheetResult:
+    def __init__(self, sheet_id: str, sheet_name: str):
+        self.sheet_id = sheet_id
+        self.sheet_name = sheet_name
+
+
+class AccountSheetResult(SheetResult):
 
     def __init__(self, sheet_id: str, sheet_name: str, emails: [str], request_datetime: datetime,
                  shared_status: AccountSheetStatus, reservation_type: AccountSheetType):
-        self.sheet_id = sheet_id
-        self.sheet_name = sheet_name
+        super().__init__(sheet_id, sheet_name)
         self.emails = emails
         self.request_datetime = request_datetime
         self.shared_status = shared_status
