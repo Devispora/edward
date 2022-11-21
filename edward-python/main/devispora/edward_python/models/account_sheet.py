@@ -1,7 +1,7 @@
 from enum import Enum
 from datetime import datetime
 
-desired_account_sheet_range = ["B1:D5"]
+desired_account_sheet_range = "B1:D5"
 
 
 class AccountSheetType(str, Enum):

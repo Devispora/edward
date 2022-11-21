@@ -69,6 +69,7 @@ def lambda_handler(event, context):
     #   - Show friendlier name instead of service account gibberish.
     #   - validate email again with some room of split-character-improvement?
     finish_date = datetime.now(tz=utc)
+
     return {
         "statusCode": 200,
         "body": json.dumps({
