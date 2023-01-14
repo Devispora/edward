@@ -6,6 +6,7 @@ from datetime import datetime
 from devispora.edward_python.constants.constants import Constants
 from devispora.edward_python.exceptions.account_sheet_exceptions import AccountSheetException, \
     AccountSheetExceptionMessage
+from devispora.edward_python.exceptions.sheet_share_exception import SheetShareException
 from devispora.edward_python.models.account_sheet import AccountSheetStatus
 from devispora.edward_python.models.erred_sheet import ErredSheet
 from devispora.edward_python.models.helpers.contact_sheet_helper import find_reps_on_sheet, fetch_emails_only, \
@@ -40,7 +41,11 @@ def lambda_handler(event, context):
     for sheet in sheets_to_share:
         approved_contacts = find_reps_on_sheet(contact_reps, sheet)
         to_share_emails = fetch_emails_only(approved_contacts)
-        share_sheet_to_users(sheet.sheet_id, to_share_emails)
+        try:
+            share_sheet_to_users(sheet.sheet_id, to_share_emails)
+        except SheetShareException as sse:
+            erred_sheets.append(ErredSheet(sheet.sheet_id, sheet.sheet_name, AccountSheetException(sse)))
+            continue
         default_range = 'B4'
         if len(to_share_emails) > 0:
             update_shared_status(sheet.sheet_id, default_range, AccountSheetStatus.StatusShared)
