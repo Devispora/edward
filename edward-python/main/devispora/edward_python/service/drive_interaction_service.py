@@ -35,7 +35,6 @@ def retrieve_items_from_folder(folder_id: str):
         raise DriveException(DriveExceptionMessage.HTTPError)
 
 
-# todo catch them exceptions
 def share_sheet_to_users(spreadsheet_id: str, emails: [str]):
     prepared_batch = drive_service.new_batch_http_request(callback=callback)
     for email in emails:

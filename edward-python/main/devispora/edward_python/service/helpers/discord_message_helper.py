@@ -1,4 +1,5 @@
 from devispora.edward_python.constants.constants import Constants
+from devispora.edward_python.exceptions.rep_sheet_exceptions import RepSheetException
 from devispora.edward_python.models.account_sheet import AccountSheetResult, AccountSheetType, SheetResult
 from devispora.edward_python.models.erred_sheet import ErredSheet
 
@@ -18,9 +19,9 @@ def shared_sheet_content(sheet: AccountSheetResult, user_ids: [int]):
     }
 
 
-def share_erred_content(sheet: ErredSheet):
+def share_sheet_erred_content(sheet: ErredSheet):
     return {
-        'content': f'Hi <@&{staff_role}>. {reveal_error_message(sheet)} {create_doc_link(sheet)}.',
+        'content': f'Hi <@&{staff_role}>. {reveal_sheet_error_message(sheet)} {create_doc_link(sheet)}.',
         'allowed_mentions': {
             'roles': [staff_role]
         },
@@ -47,8 +48,23 @@ def determine_message(sheet: AccountSheetResult):
         return 'Observer Account Sheet ready: '
 
 
-def reveal_error_message(sheet: ErredSheet):
+def reveal_sheet_error_message(sheet: ErredSheet):
     if sheet.warning.additional_message:
         return f'{sheet.warning.message}: {sheet.warning.additional_message}'
     else:
         return sheet.warning.message
+
+
+def reveal_rep_error(rep_exception: RepSheetException):
+    return f'{rep_exception.message}: {rep_exception.additional_message}'
+
+
+def share_rep_erred_content(rep_exception: RepSheetException):
+    return {
+        'content': f'Hi <@&{staff_role}> some Rep Sheet problems! {reveal_rep_error(rep_exception)}.',
+        'allowed_mentions': {
+            'roles': [staff_role]
+        },
+        'username': 'Edward is Worried',
+        'avatar_url': discord_avatar
+    }

@@ -11,7 +11,9 @@ class RepSheetException(Exception):
 
 
 class RepSheetExceptionMessage(str, Enum):
+    AccountLimitNotInt = 'Expected a number for account limit but encountered another value'
     DiscordIdNotInt = 'Expected a number but received another value'
+    MissingValueOnSheet = 'Expected anything but I am missing the following information'
     RepTypeNotRecognised = 'The supplied rep type has not been recognised'
     RepTypeIssue = 'The rep type could not be retrieved'
-    AccountLimitNotInt = 'Expected a number for account limit but encountered another value'
+
